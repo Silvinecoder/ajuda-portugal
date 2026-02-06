@@ -6,7 +6,7 @@ import OfferHelpModal from './OfferHelpModal';
 import ReportModal from './ReportModal';
 
 const urgencyColors: Record<string, string> = {
-  critical: '#dc2626',
+  Critico: '#dc2626',
   urgent: '#ea580c',
   standard: '#eab308',
   recovery: '#22c55e',

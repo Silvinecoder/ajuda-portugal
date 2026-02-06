@@ -11,7 +11,7 @@ import FilterBar from './FilterBar';
 import MapSearchBar from './MapSearchBar';
 
 const pinColors: Record<Urgency, string> = {
-  critical: '#dc2626',
+  Critico: '#dc2626',
   urgent: '#ea580c',
   standard: '#eab308',
   recovery: '#22c55e',

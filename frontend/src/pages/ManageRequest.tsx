@@ -5,7 +5,7 @@ import type { HelpRequest } from '../types';
 import { CATEGORY_LABELS, URGENCY_LABELS } from '../types';
 
 const urgencyEmoji: Record<string, string> = {
-  critical: '🔴',
+  Critico: '🔴',
   urgent: '🟠',
   standard: '🟡',
   recovery: '🟢',

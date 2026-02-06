@@ -6,7 +6,7 @@ import { encrypt, decrypt } from "../utils/encryption";
 export const helpRequestRoutes = Router();
 
 const URGENCY_MAP: Record<string, string> = {
-  critical: "critical",
+  Critico: "Critico",
   urgent: "urgent",
   standard: "standard",
   recovery: "recovery",

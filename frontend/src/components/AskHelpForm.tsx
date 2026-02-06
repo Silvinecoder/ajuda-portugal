@@ -3,7 +3,7 @@ import { createRequest } from "../api";
 import type { HelpRequest, Urgency, Category } from "../types";
 import { URGENCY_LABELS, CATEGORY_LABELS } from "../types";
 
-const URGENCIES: Urgency[] = ["critical", "urgent", "standard", "recovery"];
+const URGENCIES: Urgency[] = ["Critico", "urgent", "standard", "recovery"];
 const CATEGORIES: Category[] = [
   "food",
   "shelter",

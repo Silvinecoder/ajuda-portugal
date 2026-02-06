@@ -1,4 +1,4 @@
-export type Urgency = 'critical' | 'urgent' | 'standard' | 'recovery';
+export type Urgency = 'Critico' | 'urgent' | 'standard' | 'recovery';
 export type Category = 'food' | 'shelter' | 'reconstruction' | 'cleanup' | 'tools' | 'volunteers';
 
 export interface HelpRequest {
@@ -20,7 +20,7 @@ export interface HelpRequest {
 }
 
 export const URGENCY_LABELS: Record<Urgency, string> = {
-  critical: 'Critical',
+  Critico: 'Critico',
   urgent: 'Urgente',
   standard: 'Normal',
   recovery: 'Recuperação',
