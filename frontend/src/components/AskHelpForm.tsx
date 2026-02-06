@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 import { createRequest } from "../api";
 import type { HelpRequest, Urgency, Category } from "../types";
 import { URGENCY_LABELS, CATEGORY_LABELS } from "../types";
@@ -57,7 +59,7 @@ export default function AskHelpForm({
     lng: number;
   } | null>(null);
   const [useMyLocation, setUseMyLocation] = useState(false);
-  const [contact, setContact] = useState("");
+  const [phoneValue, setPhoneValue] = useState<string | undefined>(undefined);
   const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
@@ -166,8 +168,8 @@ export default function AskHelpForm({
       return;
     }
 
-    if (!contact.trim()) {
-      setError("Indique o número de WhatsApp");
+    if (!phoneValue || phoneValue.trim().length < 8) {
+      setError("Indique um número de WhatsApp válido com código do país");
       return;
     }
 
@@ -179,7 +181,7 @@ export default function AskHelpForm({
         description: description.trim() || undefined,
         lat,
         lng,
-        contact: contact.trim(),
+        contact: phoneValue,
         name: name.trim() || undefined,
       });
       onSuccess(req);
@@ -281,23 +283,22 @@ export default function AskHelpForm({
           <p className="form-tip">
             <strong>Dica de segurança *</strong>
             <br />
-            Use área aproximada, não morada exata. Partilhe detalhes por
-            WhatsApp depois.
+            Use uma área aproximada, não a morada exata, por segurança.
           </p>
 
           <label>
-            Como quer ser contactado?
+            WhatsApp *
             <span className="form-hint">
-              WhatsApp recomendado! Seu número nunca será mostrado publicamente.
-              Voluntários entrarão em contato apenas via WhatsApp.
+              Seus dados são protegidos e seu número nunca é visível para outros
+              usuários. Um voluntário entrará em contato com você via WhatsApp,
+              um canal seguro com criptografia de ponta a ponta.
             </span>
-            <input
-              type="tel"
-              value={contact}
-              onChange={(e) => setContact(e.target.value)}
-              placeholder="+351 912 345 678"
-            />
           </label>
+          <PhoneInput
+            placeholder="Enter phone number"
+            value={phoneValue}
+            onChange={setPhoneValue}
+          />
 
           <label>
             Nome (opcional)

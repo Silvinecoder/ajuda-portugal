@@ -368,6 +368,49 @@ textarea {
   font-weight: 500;
 }
 
+.PhoneInput {
+  margin-bottom: 20px;
+}
+
+.PhoneInputCountry {
+  padding: 0.75rem 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.PhoneInputCountry:hover {
+  border-color: var(--color-accent);
+}
+
+.PhoneInputCountry:focus-within {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.PhoneInputCountrySelect:focus {
+  outline: none;
+}
+
+.PhoneInputCountryIcon {
+  width: 24px;
+  height: 18px;
+  margin-right: 0.25rem;
+}
+
+.PhoneInputInput {
+  font-size: 1rem;
+}
+
+.PhoneInputInput:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
 .form-error {
   color: #ef4444;
   font-size: 0.9rem;
