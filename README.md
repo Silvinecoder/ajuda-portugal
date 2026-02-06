@@ -1,33 +1,29 @@
-# Ajuda Portugal - Plataforma de Ajuda Mútua
+# Help Portugal
 
-Web app para conectar pessoas em necessidade com voluntários em Portugal. Usa React + TypeScript no frontend, Node.js + Express + TypeScript no backend, PostgreSQL em Docker, e OpenStreetMap para o mapa.
+Web app to connect people in need with volunteers in Portugal. Uses React + TypeScript in the frontend, Node.js + Express + TypeScript in the backend, PostgreSQL in Docker, and OpenStreetMap for the map.
 
-## Requisitos
+## Requirements
 
 - Node.js 18+
-- Docker e Docker Compose
+- Docker and Docker Compose
 
 ## Setup
-
-### 1. Database is via docker
+### 1. Database via docker
 
 ```bash
 docker compose up -d
 ```
 
-### 2. Backend we use prisma
+### 2. Backend via prisma
 
 ```bash
 cd backend
-cp .env.example .env
 npm install
 npx prisma migrate dev --name init
 npm run dev
 ```
 
-### 3. Frontend
-
-Noutro terminal:
+### 3. Frontend react
 
 ```bash
 cd frontend
@@ -35,28 +31,27 @@ npm install
 npm run dev
 ```
 
-### 4. Aceder
+### 4. Access locally
 
 - Frontend: http://localhost:5173
 - Backend API: http://localhost:3001
 
-## Scripts (raiz do projeto)
+## Scripts
 
 ```bash
-npm run docker:up    # Inicia a base de dados
-npm run dev         # Inicia backend + frontend em paralelo
+npm run docker:up    # start the db
+npm run dev         # start the frontend and backend in parallel
 ```
 
-## Funcionalidades
+## Functionalities
+### Person in need
+- Sees the map with coloured pins to signify the urgency.
+- Asks for help: Shows a form with urgency, category, description, location and WhatsApp contact
+- After publishing: A generated unique link appears to modify the request
+- Request expires in 14 days
 
-### Pessoa em necessidade
-- Ver mapa com pins coloridos (crítico=vermelho, urgente=laranja, normal=amarelo, recuperação=verde)
-- Pedir ajuda: formulário com urgência, categoria, descrição, localização, contacto WhatsApp
-- Após publicar: link único para gerir o pedido (marcar como ajudado, atualizar, apagar)
-- Pedido expira em 14 dias
-
-### Voluntário
-- Ver mapa com filtros por urgência
-- Clicar no pin: card com detalhes
-- Oferecer ajuda: abre WhatsApp com mensagem pré-preenchida
-- Denunciar pedidos suspeitos
+### Volunteer
+- Sees map with urgency filters
+- Clicks on the pin: card show details of help required
+- Offer help: opens WhatsApp with pre-filled message of how the user can help
+- Report weird help requests

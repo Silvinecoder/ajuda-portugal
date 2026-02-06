@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { helpRequestRoutes } from './routes/helpRequests.js';
 import { reportRoutes } from './routes/reports.js';
+import dotenv from 'dotenv';
 
 const app = express();
 const PORT = process.env.PORT || 3001;

@@ -2,7 +2,7 @@ import type { Urgency } from "../types";
 
 const OPTIONS: { value: Urgency | "all"; label: string }[] = [
   { value: "all", label: "Todos" },
-  { value: "critical", label: "Crítico" },
+  { value: "Critico", label: "Crítico" },
   { value: "urgent", label: "Urgente" },
   { value: "standard", label: "Normal" },
   { value: "recovery", label: "Recuperação" },
