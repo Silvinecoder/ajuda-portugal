@@ -1,7 +1,6 @@
 import { Router } from 'express';
-import { PrismaClient } from '../generated/prisma/index.js';
+import { prisma } from '../../prisma/prisma'
 
-const prisma = new PrismaClient();
 export const reportRoutes = Router();
 
 const REASON_MAP: Record<string, string> = {

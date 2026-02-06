@@ -1,54 +1,72 @@
-import { Router } from 'express';
-import { PrismaClient } from '../generated/prisma/index.js';
-import { nanoid } from 'nanoid';
+import { Router } from "express";
+import { prisma } from "../../prisma/prisma";
+import { nanoid } from "nanoid";
+import { encrypt, decrypt } from "../utils/encryption";
 
-const prisma = new PrismaClient();
 export const helpRequestRoutes = Router();
 
 const URGENCY_MAP: Record<string, string> = {
-  critical: 'critical',
-  urgent: 'urgent',
-  standard: 'standard',
-  recovery: 'recovery',
+  critical: "critical",
+  urgent: "urgent",
+  standard: "standard",
+  recovery: "recovery",
 };
 
 const CATEGORY_MAP: Record<string, string> = {
-  food: 'food',
-  shelter: 'shelter',
-  reconstruction: 'reconstruction',
-  cleanup: 'cleanup',
-  tools: 'tools',
-  volunteers: 'volunteers',
+  food: "food",
+  shelter: "shelter",
+  reconstruction: "reconstruction",
+  cleanup: "cleanup",
+  tools: "tools",
+  volunteers: "volunteers",
 };
 
-helpRequestRoutes.get('/', async (req, res) => {
+// ------------------------
+// GET all requests
+// ------------------------
+helpRequestRoutes.get("/", async (req, res) => {
   try {
     const { urgency } = req.query;
-    const where: { status?: string; urgency?: string } = { status: 'pending' };
-    if (urgency && typeof urgency === 'string' && URGENCY_MAP[urgency]) {
-      where.urgency = urgency;
+
+    const whereClause: any = { status: "pending" };
+    if (urgency && typeof urgency === "string" && URGENCY_MAP[urgency]) {
+      whereClause.urgency = URGENCY_MAP[urgency];
     }
+
     const requests = await prisma.helpRequest.findMany({
-      where,
-      orderBy: { createdAt: 'desc' },
+      where: whereClause,
+      orderBy: { createdAt: "desc" },
     });
-    res.json(requests);
+
+    const decryptedRequests = requests.map(r => ({
+      ...r,
+      contact: decrypt(r.contact),
+      name: r.name ? decrypt(r.name) : null,
+    }));
+
+    res.json(decryptedRequests);
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: 'Failed to fetch requests' });
+    res.status(500).json({ error: "Failed to fetch requests" });
   }
 });
 
-helpRequestRoutes.post('/', async (req, res) => {
+// ------------------------
+// CREATE new request
+// ------------------------
+helpRequestRoutes.post("/", async (req, res) => {
   try {
     const { urgency, category, description, lat, lng, contact, name } = req.body;
+
     if (!urgency || !category || !lat || !lng || !contact) {
-      return res.status(400).json({ error: 'Missing required fields' });
+      return res.status(400).json({ error: "Missing required fields" });
     }
+
     const slug = nanoid(10);
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 14);
-    const request = await prisma.helpRequest.create({
+
+    const createdRequest = await prisma.helpRequest.create({
       data: {
         slug,
         urgency: URGENCY_MAP[urgency] || urgency,
@@ -56,103 +74,152 @@ helpRequestRoutes.post('/', async (req, res) => {
         description: description || null,
         lat: Number(lat),
         lng: Number(lng),
-        contact,
-        name: name || null,
+        contact: encrypt(contact),
+        name: name ? encrypt(name) : null,
         expiresAt,
       },
     });
-    res.status(201).json(request);
+
+    // Decrypt before sending response
+    const response = {
+      ...createdRequest,
+      contact: decrypt(createdRequest.contact),
+      name: createdRequest.name ? decrypt(createdRequest.name) : null,
+    };
+
+    res.status(201).json(response);
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: 'Failed to create request' });
+    res.status(500).json({ error: "Failed to create request" });
   }
 });
 
-helpRequestRoutes.get('/:slug', async (req, res) => {
+// ------------------------
+// GET request by slug
+// ------------------------
+helpRequestRoutes.get("/:slug", async (req, res) => {
   try {
     const { slug } = req.params;
-    const request = await prisma.helpRequest.findUnique({
-      where: { slug },
-      include: { reports: true },
-    });
-    if (!request) return res.status(404).json({ error: 'Not found' });
-    await prisma.helpRequest.update({
-      where: { id: request.id },
-      data: { views: { increment: 1 } },
-    });
-    res.json(request);
-  } catch (e) {
-    console.error(e);
-    res.status(500).json({ error: 'Failed to fetch request' });
-  }
-});
 
-helpRequestRoutes.post('/:slug/view', async (req, res) => {
-  try {
-    const { slug } = req.params;
     const request = await prisma.helpRequest.findUnique({ where: { slug } });
-    if (!request) return res.status(404).json({ error: 'Not found' });
+    if (!request) return res.status(404).json({ error: "Not found" });
+
+    const reports = await prisma.report.findMany({ where: { requestId: request.id } });
+
     await prisma.helpRequest.update({
       where: { id: request.id },
       data: { views: { increment: 1 } },
     });
+
+    const decryptedRequest = {
+      ...request,
+      contact: decrypt(request.contact),
+      name: request.name ? decrypt(request.name) : null,
+      reports,
+    };
+
+    res.json(decryptedRequest);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: "Failed to fetch request" });
+  }
+});
+
+// ------------------------
+// RECORD a view
+// ------------------------
+helpRequestRoutes.post("/:slug/view", async (req, res) => {
+  try {
+    const { slug } = req.params;
+
+    const request = await prisma.helpRequest.findUnique({ where: { slug } });
+    if (!request) return res.status(404).json({ error: "Not found" });
+
+    await prisma.helpRequest.update({
+      where: { id: request.id },
+      data: { views: { increment: 1 } },
+    });
+
     res.json({ ok: true });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: 'Failed to record view' });
+    res.status(500).json({ error: "Failed to record view" });
   }
 });
 
-helpRequestRoutes.post('/:slug/help-click', async (req, res) => {
+// ------------------------
+// RECORD a help click
+// ------------------------
+helpRequestRoutes.post("/:slug/help-click", async (req, res) => {
   try {
     const { slug } = req.params;
+
     const request = await prisma.helpRequest.findUnique({ where: { slug } });
-    if (!request) return res.status(404).json({ error: 'Not found' });
+    if (!request) return res.status(404).json({ error: "Not found" });
+
     await prisma.helpRequest.update({
       where: { id: request.id },
       data: { helpClicks: { increment: 1 } },
     });
+
     res.json({ ok: true });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: 'Failed to record help click' });
+    res.status(500).json({ error: "Failed to record help click" });
   }
 });
 
-helpRequestRoutes.patch('/:slug', async (req, res) => {
+// ------------------------
+// UPDATE a request
+// ------------------------
+helpRequestRoutes.patch("/:slug", async (req, res) => {
   try {
     const { slug } = req.params;
-    const { status, urgency, category, description } = req.body;
+    const { status, urgency, category, description, contact, name } = req.body;
+
     const request = await prisma.helpRequest.findUnique({ where: { slug } });
-    if (!request) return res.status(404).json({ error: 'Not found' });
-    const data: Record<string, unknown> = {};
+    if (!request) return res.status(404).json({ error: "Not found" });
+
+    const data: any = {};
     if (status) data.status = status;
     if (urgency) data.urgency = URGENCY_MAP[urgency] || urgency;
     if (category) data.category = CATEGORY_MAP[category] || category;
     if (description !== undefined) data.description = description;
-    const updated = await prisma.helpRequest.update({
-      where: { id: request.id },
-      data,
-    });
-    res.json(updated);
+    if (contact) data.contact = encrypt(contact);
+    if (name) data.name = encrypt(name);
+
+    await prisma.helpRequest.update({ where: { id: request.id }, data });
+
+    const updated = await prisma.helpRequest.findUnique({ where: { slug } });
+
+    const decryptedUpdated = {
+      ...updated,
+      contact: decrypt(updated!.contact),
+      name: updated!.name ? decrypt(updated!.name) : null,
+    };
+
+    res.json(decryptedUpdated);
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: 'Failed to update request' });
+    res.status(500).json({ error: "Failed to update request" });
   }
 });
 
-helpRequestRoutes.delete('/:slug', async (req, res) => {
+// ------------------------
+// DELETE a request (soft delete)
+// ------------------------
+helpRequestRoutes.delete("/:slug", async (req, res) => {
   try {
     const { slug } = req.params;
+
     const request = await prisma.helpRequest.findUnique({ where: { slug } });
-    if (!request) return res.status(404).json({ error: 'Not found' });
-    await prisma.helpRequest.update({
-      where: { id: request.id },
-      data: { status: 'deleted' },
-    });
+    if (!request) return res.status(404).json({ error: "Not found" });
+
+    await prisma.helpRequest.update({ where: { id: request.id }, data: { status: "deleted" } });
+
     res.json({ ok: true });
   } catch (e) {
     console.error(e);
-    res.status(500).json({ error: 'Failed to delete request' });
+    res.status(500).json({ error: "Failed to delete request" });
   }
 });

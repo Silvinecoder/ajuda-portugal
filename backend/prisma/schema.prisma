@@ -5,34 +5,33 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 model HelpRequest {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  urgency     String   // critical, urgent, standard, recovery
-  category    String   // food, shelter, reconstruction, cleanup, tools, volunteers
-  description String?
-  lat         Float
-  lng         Float
-  contactType String   @default("whatsapp") // whatsapp
-  contact     String   // phone number
-  name        String?
-  views       Int      @default(0)
-  helpClicks  Int      @default(0)
-  status      String   @default("pending") // pending, helped, resolved, deleted
-  createdAt   DateTime @default(now())
-  expiresAt   DateTime
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  urgency          String
+  category         String
+  description      String?
+  lat              Float
+  lng              Float
+  contactType      String   @default("whatsapp")
+  contact          String
+  name             String?
+  views            Int      @default(0)
+  helpClicks       Int      @default(0)
+  status           String   @default("pending")
+  createdAt        DateTime @default(now())
+  expiresAt        DateTime
 
   reports Report[]
 }
 
 model Report {
-  id          String   @id @default(cuid())
-  requestId   String
-  request     HelpRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
-  reason      String   // fake_spam, money_request, inadequate_info, duplicate, resolved, other
-  details     String?
-  createdAt   DateTime @default(now())
+  id        String      @id @default(cuid())
+  requestId String
+  request   HelpRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  reason    String // fake_spam, money_request, inadequate_info, duplicate, resolved, other
+  details   String?
+  createdAt DateTime    @default(now())
 }
