@@ -20,6 +20,7 @@ docker compose up -d
 cd backend
 npm install
 npx prisma migrate dev --name init
+npx prisma studio
 npm run dev
 ```
 
