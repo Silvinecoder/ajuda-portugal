@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { prisma } from "../../prisma/prisma";
+import { prisma } from "../../prisma/prisma.js";
 import { nanoid } from "nanoid";
-import { encrypt, decrypt } from "../utils/encryption";
+import { encrypt, decrypt } from "../utils/encryption.js";
 
 export const helpRequestRoutes = Router();
 
@@ -38,7 +38,7 @@ helpRequestRoutes.get("/", async (req, res) => {
       orderBy: { createdAt: "desc" },
     });
 
-    const decryptedRequests = requests.map(r => ({
+    const decryptedRequests = requests.map((r: any) => ({
       ...r,
       contact: decrypt(r.contact),
       name: r.name ? decrypt(r.name) : null,
