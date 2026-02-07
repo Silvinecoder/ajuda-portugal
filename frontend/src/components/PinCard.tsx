@@ -25,12 +25,10 @@ function formatDate(dateStr: string) {
 interface PinCardProps {
   request: HelpRequest;
   compact?: boolean;
-  onClose?: () => void;
   onShowFull?: () => void;
 }
 
-export default function PinCard({ request, compact, onClose, onShowFull }: PinCardProps) {
-  const [showFull, setShowFull] = useState(false);
+export default function PinCard({ request, compact, onShowFull }: PinCardProps) {
   const [showOffer, setShowOffer] = useState(false);
   const [showReport, setShowReport] = useState(false);
 
@@ -49,7 +47,7 @@ export default function PinCard({ request, compact, onClose, onShowFull }: PinCa
         </span>
         <span className="pin-category">{CATEGORY_LABELS[request.category as keyof typeof CATEGORY_LABELS]}</span>
         {request.description && <p className="pin-desc">{request.description}</p>}
-        <button onClick={onShowFull || (() => setShowFull(true))}>Ver mais</button>
+        <button onClick={onShowFull}>Ver mais</button>
       </div>
     );
   }

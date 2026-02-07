@@ -90,7 +90,6 @@ export default function ManageRequest() {
   }
 
   const category = CATEGORY_LABELS[request.category as keyof typeof CATEGORY_LABELS];
-  const urgency = URGENCY_LABELS[request.urgency as keyof typeof URGENCY_LABELS];
   const emoji = urgencyEmoji[request.urgency] || '🟡';
 
   return (
