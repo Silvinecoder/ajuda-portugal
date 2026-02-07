@@ -1,6 +1,6 @@
 import type { HelpRequest } from './types';
 
-const API = '/api';
+const API = process.env.VITE_API_URL
 
 export async function fetchRequests(urgency?: string): Promise<HelpRequest[]> {
   const url = urgency ? `${API}/requests?urgency=${urgency}` : `${API}/requests`;
