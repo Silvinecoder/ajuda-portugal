@@ -104,7 +104,6 @@ export default function MapView() {
                 request={req}
                 compact
                 onShowFull={() => setSelectedPin(req)}
-                onClose={() => setSelectedPin(null)}
               />
             </Popup>
           </Marker>
@@ -141,7 +140,7 @@ export default function MapView() {
       {selectedPin && (
         <div className="pin-detail-overlay" onClick={() => setSelectedPin(null)}>
           <div className="pin-detail-card" onClick={(e) => e.stopPropagation()}>
-            <PinCard request={selectedPin} onClose={() => setSelectedPin(null)} />
+            <PinCard request={selectedPin} />
           </div>
         </div>
       )}

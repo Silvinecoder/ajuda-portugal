@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchRequest, updateRequest, deleteRequest } from '../api';
 import type { HelpRequest } from '../types';
-import { CATEGORY_LABELS, URGENCY_LABELS } from '../types';
+import { CATEGORY_LABELS } from '../types';
 
 const urgencyEmoji: Record<string, string> = {
   Critico: '🔴',
