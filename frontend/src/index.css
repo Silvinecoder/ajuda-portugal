@@ -144,13 +144,13 @@ textarea {
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-wrap: wrap;
-  max-width: 474px;
   width: 100%;
+  max-width: 474px;
   z-index: 900;
   background: var(--color-surface);
-  padding: 8px;
+  padding: 8px 0;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
@@ -227,7 +227,8 @@ textarea {
   position: fixed;
   top: 0;
   right: 0;
-  width: 100%;
+  width: 400px;
+  max-width: 400px;
   height: 100vh;
   background: white;
   box-shadow: -2px 0 12px rgba(0, 0, 0, 0.15);
@@ -348,7 +349,7 @@ textarea {
 @media (max-width: 768px) {
   .info-panel {
     width: 100%;
-    max-width: 400px;
+    max-width: 100%;
   }
 }
 

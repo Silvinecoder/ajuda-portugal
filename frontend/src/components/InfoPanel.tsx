@@ -6,7 +6,6 @@ export default function InfoPanel() {
 
   return (
     <>
-      {/* Toggle button for mobile/small screens */}
       <button
         className="info-toggle-btn"
         onClick={() => setIsOpen(!isOpen)}
@@ -23,7 +22,6 @@ export default function InfoPanel() {
         )}
       </button>
 
-      {/* Info Panel */}
       <div className={`info-panel ${isOpen ? "open" : "closed"}`}>
         <div className="info-content">
           <h2>O que é Ajuda Portugal?</h2>
