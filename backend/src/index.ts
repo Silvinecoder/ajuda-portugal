@@ -5,15 +5,17 @@ import { reportRoutes } from "./routes/reports.js";
 
 const app = express();
 
-console.log('VERCEL_FRONTEND_APP:', process.env.VERCEL_FRONTEND_APP);
-
 app.use(
   cors({
-    origin: ["http://localhost:5173", process.env.VERCEL_FRONTEND_APP || ""],
+    origin: [
+      "http://localhost:5173",
+      process.env.VERCEL_FRONTEND_APP!
+    ],
     credentials: true,
     methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
   }),
 );
+
 app.use(express.json());
 
 app.use("/api/requests", helpRequestRoutes);
