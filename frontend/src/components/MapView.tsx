@@ -1,25 +1,25 @@
-import { useState, useEffect, useCallback } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import type { HelpRequest, Urgency } from '../types';
-import { fetchRequests } from '../api';
-import AskHelpForm from './AskHelpForm';
-import SuccessModal from './SuccessModal';
-import PinCard from './PinCard';
-import FilterBar from './FilterBar';
-import MapSearchBar from './MapSearchBar';
+import { useState, useEffect, useCallback } from "react";
+import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import type { HelpRequest, Urgency } from "../types";
+import { fetchRequests } from "../api";
+import AskHelpForm from "./AskHelpForm";
+import SuccessModal from "./SuccessModal";
+import PinCard from "./PinCard";
+import FilterBar from "./FilterBar";
+import MapSearchBar from "./MapSearchBar";
 
 const pinColors: Record<Urgency, string> = {
-  Critico: '#dc2626',
-  urgent: '#ea580c',
-  standard: '#eab308',
-  recovery: '#22c55e',
+  Critico: "#dc2626",
+  urgent: "#ea580c",
+  standard: "#eab308",
+  recovery: "#22c55e",
 };
 
 function createIcon(color: string) {
   return L.divIcon({
-    className: 'custom-pin',
+    className: "custom-pin",
     html: `<div style="
       width: 24px; height: 24px;
       background: ${color};
@@ -42,34 +42,45 @@ function MapCenter({ center }: { center: [number, number] }) {
 
 export default function MapView() {
   const [requests, setRequests] = useState<HelpRequest[]>([]);
-  const [filter, setFilter] = useState<Urgency | 'all'>('all');
+  const [filter, setFilter] = useState<Urgency | "all">("all");
   const [showForm, setShowForm] = useState(false);
-  const [successRequest, setSuccessRequest] = useState<HelpRequest | null>(null);
+  const [successRequest, setSuccessRequest] = useState<HelpRequest | null>(
+    null,
+  );
   const [selectedPin, setSelectedPin] = useState<HelpRequest | null>(null);
   const [center, setCenter] = useState<[number, number]>([39.5, -8]);
 
-  const loadRequests = useCallback(() => {
-    fetchRequests(filter === 'all' ? undefined : filter)
+  const loadRequests = () => {
+    fetchRequests(filter === "all" ? undefined : filter)
       .then(setRequests)
       .catch(() => setRequests([]));
-  }, [filter]);
+  };
 
   useEffect(() => {
     loadRequests();
-  }, [loadRequests]);
+  }, [filter]);
 
   useEffect(() => {
-    const interval = setInterval(loadRequests, 30000);
+    const interval = setInterval(() => {
+      fetchRequests(filter === "all" ? undefined : filter)
+        .then(setRequests)
+        .catch(() => setRequests([]));
+    }, 30000);
     return () => clearInterval(interval);
-  }, [loadRequests]);
+  }, [filter]);
 
   useEffect(() => {
     const onVisibilityChange = () => {
-      if (document.visibilityState === 'visible') loadRequests();
+      if (document.visibilityState === "visible") {
+        fetchRequests(filter === "all" ? undefined : filter)
+          .then(setRequests)
+          .catch(() => setRequests([]));
+      }
     };
-    document.addEventListener('visibilitychange', onVisibilityChange);
-    return () => document.removeEventListener('visibilitychange', onVisibilityChange);
-  }, [loadRequests]);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    return () =>
+      document.removeEventListener("visibilitychange", onVisibilityChange);
+  }, [filter]);
 
   const handleFormSuccess = (req: HelpRequest) => {
     setShowForm(false);
@@ -82,7 +93,7 @@ export default function MapView() {
       <MapContainer
         center={center}
         zoom={7}
-        style={{ height: '100vh', width: '100%' }}
+        style={{ height: "100vh", width: "100%" }}
         zoomControl={false}
       >
         <TileLayer
@@ -94,7 +105,9 @@ export default function MapView() {
           <Marker
             key={req.id}
             position={[req.lat, req.lng]}
-            icon={createIcon(pinColors[req.urgency as Urgency] || pinColors.standard)}
+            icon={createIcon(
+              pinColors[req.urgency as Urgency] || pinColors.standard,
+            )}
             eventHandlers={{
               click: () => setSelectedPin(req),
             }}
@@ -138,7 +151,10 @@ export default function MapView() {
       )}
 
       {selectedPin && (
-        <div className="pin-detail-overlay" onClick={() => setSelectedPin(null)}>
+        <div
+          className="pin-detail-overlay"
+          onClick={() => setSelectedPin(null)}
+        >
           <div className="pin-detail-card" onClick={(e) => e.stopPropagation()}>
             <PinCard request={selectedPin} />
           </div>
