@@ -51,9 +51,16 @@ export default function MapView() {
   const [center, setCenter] = useState<[number, number]>([39.5, -8]);
 
   const loadRequests = () => {
+    console.log("🔄 Loading requests with filter:", filter);
     fetchRequests(filter === "all" ? undefined : filter)
-      .then(setRequests)
-      .catch(() => setRequests([]));
+      .then((data) => {
+        console.log("✅ Got requests:", data);
+        setRequests(data);
+      })
+      .catch((err) => {
+        console.error("❌ Error loading requests:", err);
+        setRequests([]);
+      });
   };
 
   useEffect(() => {
