@@ -9,6 +9,7 @@ import SuccessModal from "./SuccessModal";
 import PinCard from "./PinCard";
 import FilterBar from "./FilterBar";
 import MapSearchBar from "./MapSearchBar";
+import InfoPanel from "./InfoPanel";
 
 const pinColors: Record<Urgency, string> = {
   Critico: "#dc2626",
@@ -133,6 +134,8 @@ export default function MapView() {
       <MapSearchBar onLocationSelect={(lat, lng) => setCenter([lat, lng])} />
 
       <FilterBar value={filter} onChange={setFilter} />
+      
+      <InfoPanel />
 
       <button
         className="ask-help-btn"
