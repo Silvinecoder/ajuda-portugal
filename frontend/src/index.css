@@ -199,7 +199,7 @@ textarea {
 /* Ask help button */
 .ask-help-btn {
   position: absolute;
-  bottom: 24px;
+  bottom: max(24px, env(safe-area-inset-bottom, 24px));
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
@@ -216,6 +216,13 @@ textarea {
 
 .ask-help-btn:hover {
   transform: translateX(-50%) scale(1.02);
+}
+
+/* Additional mobile-specific adjustment to avoid browser navigation bars */
+@media (max-width: 768px) {
+  .ask-help-btn {
+    bottom: calc(max(24px, env(safe-area-inset-bottom, 24px)) + 60px);
+  }
 }
 
 /* Info Panel Styles */
