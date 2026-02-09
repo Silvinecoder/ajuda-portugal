@@ -1,0 +1,132 @@
+.info-icon-img {
+  width: 50px;
+  height: 50px;
+}
+.info-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  max-width: 400px;
+  height: 100vh;
+  background: white;
+  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+}
+
+.info-panel.closed {
+  transform: translateX(100%);
+}
+
+.info-panel.open {
+  transform: translateX(0);
+}
+
+.info-content {
+  padding: 24px;
+}
+
+.info-content h2 {
+  margin-bottom: 24px;
+  color: #1f2937;
+  font-size: 24px;
+  font-weight: 700;
+  border-bottom: 2px solid #3b82f6;
+  padding-bottom: 12px;
+}
+
+.info-section {
+  margin-bottom: 24px;
+}
+
+.info-section h3 {
+  margin: 0 0 12px 0;
+  color: #374151;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.info-section p {
+  margin: 0 0 12px 0;
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.info-section ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #4b5563;
+}
+
+.info-section li {
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.info-section li strong {
+  color: #1f2937;
+}
+
+.info-footer {
+  text-align: center;
+  font-style: italic;
+  color: #6b7280;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+/* Toggle Button */
+.info-toggle-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1100;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: white;
+  border: 2px solid #3b82f6;
+  color: #3b82f6;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.info-toggle-btn:hover {
+  background: #3b82f6;
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .info-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-panel {
+    width: 100%;
+  }
+
+  .info-content {
+    padding: 16px;
+  }
+
+  .info-content h2 {
+    font-size: 20px;
+  }
+
+  .info-section h3 {
+    font-size: 16px;
+  }
+}

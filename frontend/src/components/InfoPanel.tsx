@@ -60,28 +60,6 @@ export default function InfoPanel() {
               base de dados são eliminados automaticamente após 14 dias.
             </p>
           </div>
-
-          <div className="info-section">
-            <h3>Níveis de urgência</h3>
-            <div className="urgency-levels">
-              <div className="urgency-item">
-                <span className="urgency-dot" style={{ background: "#dc2626" }}></span>
-                <span><strong>Crítico</strong></span>
-              </div>
-              <div className="urgency-item">
-                <span className="urgency-dot" style={{ background: "#ea580c" }}></span>
-                <span><strong>Urgente</strong></span>
-              </div>
-              <div className="urgency-item">
-                <span className="urgency-dot" style={{ background: "#eab308" }}></span>
-                <span><strong>Normal</strong></span>
-              </div>
-              <div className="urgency-item">
-                <span className="urgency-dot" style={{ background: "#22c55e" }}></span>
-                <span><strong>Recuperação</strong></span>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </>

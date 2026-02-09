@@ -1,0 +1,75 @@
+.pin-card {
+  min-width: 220px;
+}
+
+.pin-card.compact {
+  min-width: 180px;
+}
+
+.pin-urgency {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.pin-category {
+  display: block;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.pin-desc {
+  font-size: 0.9rem;
+  margin: 8px 0;
+  line-height: 1.4;
+}
+
+.pin-meta {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin: 8px 0 12px;
+}
+
+.pin-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.offer-btn {
+  padding: 10px 16px;
+  background: #25d366;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.report-btn {
+  padding: 8px 16px;
+  background: transparent;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-surface-hover);
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.pin-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1500;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 20px;
+}
+
+.pin-detail-card {
+  background: var(--color-surface);
+  max-width: 400px;
+  width: 100%;
+  padding: 24px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
